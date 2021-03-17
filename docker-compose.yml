@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: ./docker
+    volumes:
+      - ./project:/var/www/project
+    links:
+      - rabbitmq
+    ports:
+      - 8000:8000
+    environment:
+      - XDEBUG_CONFIG=client_host=192.168.31.114 client_port=9004
+      - XDEBUG_MODE=debug,develop
+      - PHP_IDE_CONFIG=serverName=test
+    working_dir: '/var/www/project'
+    entrypoint: ['symfony', 'server:start']
+
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    ports:
+      - 15672:15672
